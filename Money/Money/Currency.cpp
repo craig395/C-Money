@@ -4,18 +4,24 @@
 class ISO4217 {//TODO: add info on usage
 private:
 	std::string alpha;
-	std::string numeric;
+	int numeric;
 public:
-	ISO4217(std::string alpha, std::string numeric) {
+	ISO4217(std::string alpha, int numeric) {
 		this->alpha = alpha;
-		this->numeric = numeric;
+
+		if ((numeric >= 0) && (numeric < 1000)) {
+			this->numeric = numeric;
+		}
+		else {
+			throw(-1);//TODO: add error number and description
+		}
 	}
 
 	std::string getAlpha() {//TODO: add info on usage
 		return alpha;
 	}
 
-	std::string getNumeric() {//TODO: add info on usage
+	int getNumeric() {//TODO: add info on usage
 		return numeric;
 	}
 };
@@ -86,14 +92,20 @@ public:
 class currency {//TODO: add info on usage
 private:
 	std::string name;
-	ISO4217 currISO = ISO4217("", "");
+	ISO4217 currISO = ISO4217("", 0);
 	unitName currUnitName = unitName("", "");
+	unitSymbol currUnitSymbol = unitSymbol("", "");
 	int displayDecimals;
 	displayFormat format = displayFormat(',', '.');
 public:
 	//Default currency type (GBP)
 	currency() {
-		//TODO: insert default details for GBP
+		name = "Pound Sterling";
+		currISO = ISO4217("GBP", 826);
+		currUnitName = unitName("pound", "pence");
+		currUnitSymbol = unitSymbol("£", "p");
+		displayDecimals = 2;
+		format = displayFormat(',', '.');
 	}
 
 	currency(std::string name, ISO4217 currencyISO, unitName currencyUnitName, unitSymbol currencyUnitSymbol, int displayDecimals, displayFormat format) {
@@ -129,23 +141,30 @@ class currencyIndex {//TODO: maybe split into index template class and this
 public:
 	//Creates the initial index with a list of currencies
 	currencyIndex() {
-		insertNewCurrency(currency("Pound Sterling", ISO4217("GBP", "826"), unitName("pound", "pence"), unitSymbol("£","p"), 2, displayFormat(',', '.')));
+		insertNewCurrency(currency("Pound Sterling", ISO4217("GBP", 826), unitName("pound", "pence"), unitSymbol("£","p"), 2, displayFormat(',', '.')));
 		//TODO: insert many more currency's
 	}
 
 	//Add's a new currency to the index.
 	//insertNewCurrency((currency) the new currency object to insert in the index), this returns to values
-	void insertNewCurrency(currency newCurrecny) {
+	void insertNewCurrency(currency newCurrecny) {//TODO: add info on usage
 		//Resize array if necessary
 		if (currencyCount >= arraySize) {
 			increaseArraySize();
 		}
 
+		//TODO: update to order inserted currency's by ISO numeric and if turned on add to second array in order of ISO alpha(pointers to original)
 		//Add the new currency
 		currencyArray[currencyCount] = newCurrecny;
 		//Update the currency count
 		currencyCount++;
 	}
+
+	//Search for currency by ISO number
+	currency searchByISOnumberic(std::string id) {//TODO: add info on usage
+
+	}
+
 private:
 	const static int initialSize = 50; //Initial size of the array, by default its the number of default items plus 5
 	const static int arraySizeStep = 10; //The amount to increase the array size by
@@ -155,6 +174,7 @@ private:
 	currency* currencyArray = new currency[initialSize];
 
 	//Increases the size of the array
+	//TODO: add more details on usage
 	void increaseArraySize() {
 		int newArraySize = arraySize + arraySizeStep;
 		//TODO: maybe a check for overflow/ check tmpArray for errors.
