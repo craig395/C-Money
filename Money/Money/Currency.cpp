@@ -137,12 +137,16 @@ public:
 	}
 };
 
-class currencyIndex {//TODO: maybe split into index template class and this
+class currencyIndex {//TODO: maybe split into index template class and this   //TODO: add info on usage
 public:
 	//Creates the initial index with a list of currencies
 	currencyIndex() {
-		insertNewCurrency(currency("Pound Sterling", ISO4217("GBP", 826), unitName("pound", "pence"), unitSymbol("£","p"), 2, displayFormat(',', '.')));
+		insertNewCurrency(currency("Pound Sterling", ISO4217("GBP", 826), unitName("pound", "pence"), unitSymbol("£","p"), 2, displayFormat(',', '.')));//GB Pound Sterling
 		//TODO: insert many more currency's
+	}
+
+	currencyIndex(currency firstCurrency) {//TODO: add info on usage
+		insertNewCurrency(firstCurrency);
 	}
 
 	//Add's a new currency to the index.

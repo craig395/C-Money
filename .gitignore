@@ -26,3 +26,9 @@
 *.exe
 *.out
 *.app
+*.log
+*.tlog
+*.idb
+*.pdb
+*.suo
+*.db
